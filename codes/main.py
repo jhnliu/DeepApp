@@ -125,81 +125,7 @@ def run(args):
 			if parameters.model_mode in ['AppPre']:	
 				model = AppPre(parameters=parameters).cuda()
 				criterion = AppLoss(parameters=parameters).cuda()
-			elif parameters.model_mode in ['AppPreGtr']:	
-				model = AppPreGtr(parameters=parameters).cuda()
-				criterion = AppLoss(parameters=parameters).cuda()
-			elif parameters.model_mode in ['AppPreUser']:
-				model = AppPreUser(parameters=parameters).cuda()
-				criterion = AppLoss(parameters=parameters).cuda()
-			elif parameters.model_mode in ['AppPreUserCGtr']:
-				model = AppPreUserCGtr(parameters=parameters).cuda()
-				criterion = AppLoss(parameters=parameters).cuda()
-			elif parameters.model_mode in ['AppPreUserRGtr']:
-				model = AppPreUserRGtr(parameters=parameters).cuda()
-				criterion = AppLoss(parameters=parameters).cuda()
-			elif parameters.model_mode in ['AppPreUserPGtr']:
-				model = AppPreUserPGtr(parameters=parameters).cuda()
-				criterion = AppLoss(parameters=parameters).cuda()
-			elif parameters.model_mode in ['AppPreUserCGtrTopk']:
-				model = AppPreUserCGtrTopk(parameters=parameters).cuda()
-				criterion = AppLoss(parameters=parameters).cuda()
-			elif parameters.model_mode in ['AppPreUserCGtrHis']:
-				model = AppPreUserCGtrHis(parameters=parameters).cuda()
-				criterion = AppLoss(parameters=parameters).cuda()
-			elif parameters.model_mode in ['AppPreUserCGtrHisAttn']:
-				model = AppPreUserCGtrHisAttn(parameters=parameters).cuda()
-				criterion = AppLoss(parameters=parameters).cuda()
-			elif parameters.model_mode in ['AppPreUserPGtrTopk']:
-				model = AppPreUserPGtrTopk(parameters=parameters).cuda()
-				criterion = AppLoss(parameters=parameters).cuda()
-			elif parameters.model_mode in ['AppPreLocRUserCGtrHis']:
-				model = AppPreLocRUserCGtrHis(parameters=parameters).cuda()
-				criterion = AppLoss(parameters=parameters).cuda()	
-			elif parameters.model_mode in ['AppPreLocCUserCGtrHis']:
-				model = AppPreLocCUserCGtrHis(parameters=parameters).cuda()
-				criterion = AppLoss(parameters=parameters).cuda()	
-			elif parameters.model_mode in ['AppPreLocRUserCGtr']:
-				model = AppPreLocRUserCGtr(parameters=parameters).cuda()
-				criterion = AppLoss(parameters=parameters).cuda()	
-			elif parameters.model_mode in ['AppPreLocRUserCGtrTopk']:
-				model = AppPreLocRUserCGtrTopk(parameters=parameters).cuda()
-				criterion = AppLoss(parameters=parameters).cuda()	
-			#"""Pre Loc"""	
-			elif parameters.model_mode in ['LocPre']:
-				model = LocPre(parameters=parameters).cuda()
-				criterion = LocLoss(parameters=parameters).cuda()
-			elif parameters.model_mode in ['LocPreGt','LocPreGtr']:
-				model = LocPreGtr(parameters=parameters).cuda()
-				criterion = LocLoss(parameters=parameters).cuda()
-			elif parameters.model_mode in ['LocPreUser']:
-				model = LocPreUser(parameters=parameters).cuda()
-				criterion = LocLoss(parameters=parameters).cuda()
-			elif parameters.model_mode in ['LocPreUserGt', 'LocPreUserGtr']: 
-				model = LocPreUserGtr(parameters=parameters).cuda()
-				criterion = LocLoss(parameters=parameters).cuda()
-			elif parameters.model_mode in ['LocPreUserGtTopk', 'LocPreUserGtrTopk']:
-				model = LocPreUserGtrTopk(parameters=parameters).cuda()
-				criterion = LocLoss(parameters=parameters).cuda()
-			elif parameters.model_mode in ['LocPreUserGtRec', 'LocPreUserGtrRec']:
-				model = LocPreUserGtrRec(parameters=parameters).cuda()
-				criterion = LocLoss(parameters=parameters).cuda()
-			#"""Iden user"""		
-			elif parameters.model_mode in ['UserIden']:
-				model = UserIden(parameters=parameters).cuda()
-				criterion = nn.NLLLoss().cuda()
 			#"""Pre App, Loc and user"""		
-			elif parameters.model_mode in ['AppPreUserIden']:
-				model = AppPreUserIden(parameters=parameters).cuda()
-				criterion = AppUserLoss(parameters=parameters).cuda()
-			elif parameters.model_mode in ['AppPreLocPreGtr']:
-				model = AppPreLocPreGtr(parameters=parameters).cuda()
-				criterion = AppLocLoss(parameters=parameters).cuda()
-			elif parameters.model_mode in ['AppPreUserIdenGt','AppPreUserIdenGtr']:
-				model = AppPreUserIdenGtr(parameters=parameters).cuda()
-				criterion = AppUserLoss(parameters=parameters).cuda()
-			elif parameters.model_mode in ['AppPreLocUserIdenGtr']:
-				model = AppPreLocUserIdenGtr(parameters=parameters).cuda()
-				criterion = AppUserLoss(parameters=parameters).cuda()
 			elif parameters.model_mode in ['AppPreLocPreUserIden']:
 				model = AppPreLocPreUserIden(parameters=parameters).cuda()
 				criterion = AppLocUserLoss(parameters=parameters).cuda()
@@ -210,12 +136,12 @@ def run(args):
 				model = AppPreLocPreUserIdenGtrLinear(parameters=parameters).cuda()
 				criterion = AppLocUserLoss(parameters=parameters).cuda()
 			#"""For embedding"""		
-			elif parameters.model_mode in ['LocEmbed', 'LocPreUserGtrLocEmb']:	
-				line_1st = Line_1st(parameters.loc_size, parameters.loc_emb_size).cuda()
-				line_2nd = Line_2nd(parameters.loc_size, parameters.loc_emb_size).cuda()
-				model = LocPreUserGtrLocEmb(parameters=parameters,line_1st=line_1st,line_2nd=line_2nd,alpha=1).cuda()
-				criterion = nn.NLLLoss().cuda()
-				T0 = T-1
+			# elif parameters.model_mode in ['LocEmbed', 'LocPreUserGtrLocEmb']:	
+			# 	line_1st = Line_1st(parameters.loc_size, parameters.loc_emb_size).cuda()
+			# 	line_2nd = Line_2nd(parameters.loc_size, parameters.loc_emb_size).cuda()
+			# 	model = LocPreUserGtrLocEmb(parameters=parameters,line_1st=line_1st,line_2nd=line_2nd,alpha=1).cuda()
+			# 	criterion = nn.NLLLoss().cuda()
+			# 	T0 = T-1
 
 		print(model)
 		params = list(model.parameters())
@@ -317,9 +243,9 @@ def run(args):
 
 			else:
 				optimizer1 = optim.Adam(filter(lambda p: p.requires_grad, line_1st.parameters()), lr=1e-3)
-				run_embedding(line_1st, loc_emb_data_loaer_1, 1, optimizer1, 0, epoch, parameters.epoch)
+				run_embedding(line_1st, loc_emb_data_loader_1, 1, optimizer1, 0, epoch, parameters.epoch)
 				optimizer2 = optim.Adam(filter(lambda p: p.requires_grad, line_2nd.parameters()), lr=1e-3)
-				run_embedding(line_2nd, loc_emb_data_loaer_2, 2, optimizer2, parameters.loc_emb_negative, epoch, parameters.epoch)
+				run_embedding(line_2nd, loc_emb_data_loader_2, 2, optimizer2, parameters.loc_emb_negative, epoch, parameters.epoch)
 				line = Line(line_1st, line_2nd, alpha=1,name='epoch'+str(epoch)) #the ration of 1st and 2nd
 				line.save_emb()
 		

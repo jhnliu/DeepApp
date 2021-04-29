@@ -148,7 +148,7 @@ def generate_input(parameters, mode, loc_old2newid, user_topk=None, mode2=None, 
 		sessions = data_neural[u]['sessions']
 		train_id = data_neural[u][mode]  #the day for training
 		data_train[u] = {} #re-index user from 0
-		locations_train = []
+		# locations_train = []
 		for c, i in enumerate(train_id): #day
 			session = sessions[i]
 			trace = {}

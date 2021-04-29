@@ -39,7 +39,7 @@ class RnnParameterData(object):
 		self.users_end = users_end
 
 		self.tim_size = 48
-		self.loc_size = len(self.vid_list)+1
+		self.loc_size = len(self.vid_list)+1 # why +1??? because fo embedding has to be number of index
 		self.uid_size = users_end #re_sized for candidate, otherwise, the user embedding will exceed the len(uid)
 		self.app_size = app_size
 		self.loc_emb_size = loc_emb_size
@@ -249,7 +249,7 @@ def generate_input_history(parameters, mode, loc_old2newid, user_topk=None, mode
 			
 			history = []
 			if mode == 'test':
-				test_id = data_neural[u]['train']
+				test_id = data_neural[u]['train'] # should be test???
 				for tt in test_id:
 					history.extend([(s[0], s[1], s[2]) for s in sessions[tt]])
 			for j in range(c):
